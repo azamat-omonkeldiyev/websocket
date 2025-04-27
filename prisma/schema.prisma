@@ -26,33 +26,33 @@ model User {
   FromMessage Message[] @relation("FromUser")
   ToMessage   Message[] @relation("ToUser")
 
-  groups        Group[]
+  groups       Group[]
   groupMessage GroupMessage[]
-  
 
-  createdAt     DateTime       @default(now())
+  createdAt     DateTime        @default(now())
+  GlobalMessage GlobalMessage[]
 }
 
 model Chat {
-  id       String    @id @default(uuid())
-  from     User      @relation("FromUser", fields: [fromId], references: [id])
-  fromId   String
-  to       User      @relation("ToUser", fields: [toId], references: [id])
-  toId     String
+  id     String @id @default(uuid())
+  from   User   @relation("FromUser", fields: [fromId], references: [id])
+  fromId String
+  to     User   @relation("ToUser", fields: [toId], references: [id])
+  toId   String
 
-  Message  Message[]
+  Message   Message[]
   createdAt DateTime  @default(now())
 }
 
 model Message {
-  id       String   @id @default(uuid())
-  from     User     @relation("FromUser", fields: [fromId], references: [id])
-  fromId   String
-  to       User    @relation("ToUser", fields: [toId], references: [id])
-  toId     String
-  chat     Chat     @relation(fields: [chatId], references: [id])
-  chatId   String
-  text     String
+  id        String   @id @default(uuid())
+  from      User     @relation("FromUser", fields: [fromId], references: [id])
+  fromId    String
+  to        User     @relation("ToUser", fields: [toId], references: [id])
+  toId      String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  chatId    String
+  text      String
   createdAt DateTime @default(now())
 }
 
@@ -66,11 +66,18 @@ model Group {
 }
 
 model GroupMessage {
-  id      String @id @default(uuid())
-  from    User   @relation(fields: [userId], references: [id])
-  userId  String
-  group   Group  @relation(fields: [groupId], references: [id])
-  groupId String
-  text String
+  id        String   @id @default(uuid())
+  from      User     @relation(fields: [userId], references: [id])
+  userId    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
+  text      String
   createdAt DateTime @default(now())
+}
+
+model GlobalMessage {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  text   String
+  userId String
 }
